@@ -8,9 +8,10 @@ const (
 	EMPTY
 )
 
-type Board [3][3]Player  // [row][col]
+type Board [3][3]Player // [row][col]
 
 
+// Parse a Board from a string of 'o', 'x', and ' '
 func FromString(param string) *Board {
 	if len(param) != 9 {
 		return nil
@@ -32,20 +33,42 @@ func FromString(param string) *Board {
 	return output
 }
 
+// Print a Board out as nine characters - 'o', 'x', and ' '
 func (b *Board) ToString() string {
 	output := ""
-	for _, row := range(b) {
-		for _, space := range(row) {
-		switch(space) {
-			case EMPTY: output += " "
-			case O: output += "o"
-			case X: output += "x"
+	for _, row := range b {
+		for _, space := range row {
+			switch space {
+			case EMPTY:
+				output += " "
+			case O:
+				output += "o"
+			case X:
+				output += "x"
+			}
 		}
-	}
 	}
 	return output
 }
 
-func (*Board) validate() bool {
-	return true
+// Check if it looks like its our turn
+func (b *Board) Validate() bool {
+	xcount, ocount := 0, 0
+	for _, row := range b {
+		for _, space := range row {
+			switch space {
+			case O:
+				ocount += 1
+			case X:
+				xcount += 1
+			}
+		}
+	}
+
+    // Either the # of moves per player should be equal (we went first)
+    // Or there should be one more X than O's (they went first)
+	if xcount == ocount || xcount-1 == ocount {
+		return true
+	}
+	return false
 }
