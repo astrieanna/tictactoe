@@ -10,6 +10,16 @@ const (
 
 type Board [3][3]Player // [row][col]
 
+func (b *Board) deepCopyBoard() *Board {
+	b2 := new(Board)
+	for i, row := range(b) {
+		for j, space := range(row) {
+			b2[i][j] = space
+		}
+	}
+	return b2
+}
+
 // Parse a Board from a string of 'o', 'x', and ' '
 func FromString(param string) *Board {
 	if len(param) != 9 {
