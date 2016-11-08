@@ -10,7 +10,6 @@ const (
 
 type Board [3][3]Player // [row][col]
 
-
 // Parse a Board from a string of 'o', 'x', and ' '
 func FromString(param string) *Board {
 	if len(param) != 9 {
@@ -52,7 +51,7 @@ func (b *Board) ToString() string {
 }
 
 // Check if it looks like its our turn
-func (b *Board) Validate() bool {
+func (b *Board) Validate() string {
 	xcount, ocount := 0, 0
 	for _, row := range b {
 		for _, space := range row {
@@ -65,10 +64,16 @@ func (b *Board) Validate() bool {
 		}
 	}
 
-    // Either the # of moves per player should be equal (we went first)
-    // Or there should be one more X than O's (they went first)
-	if xcount == ocount || xcount-1 == ocount {
-		return true
+	// There are nine spaces on the board; make sure at least one is empty
+	if xcount+ocount == 9 {
+		return "All spaces are full; there's no where for me to play"
 	}
-	return false
+
+	// Either the # of moves per player should be equal (we went first)
+	// Or there should be one more X than O's (they went first)
+	if xcount == ocount || xcount-1 == ocount {
+		return ""
+	}
+	return "It's not O's turn."
+
 }
